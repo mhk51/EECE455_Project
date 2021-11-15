@@ -27,8 +27,12 @@ def encryptaffinecipher(a, b ,P):
 
 def decryptaffinecipher(a, b, C):
     output = ""
+    inverse_A = extended_euclid(26,a)
+    if(inverse_A == 0):
+        print("No Inverse")
+        return
     for i in range(len(C)):
-        output += chr((extended_euclid(26,a)*((ord(C[i])-97)-b))%26 + 97)
+        output += chr((inverse_A*((ord(C[i])-97)-b))%26 + 97)
     return output
 
 
