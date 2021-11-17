@@ -1,8 +1,8 @@
 from extended_euclid import extended_euclid
 
-# a = int(input("input a: "))
-# b = int(input("input b: "))
-# P = input("input plaintext: ")
+a = int(input("input a: "))
+b = int(input("input b: "))
+P = input("input plaintext: ")
 
 def encryptaffinecipher(a, b ,P):
     output = ""
@@ -94,17 +94,17 @@ def Decryptvigenere(string, key):
             output += string[i]
     return output
 
-# print(encryptaffinecipher(a,b,P))
-# C = input("input ciphertext: ")
-# print(decryptaffinecipher(a,b,C))
-# x = input("input the most common letter: ")
-# y = input("input the 2nd most common letter: ")
-# print(crackaffinecipher(x,y))
-# c = input("input string: ")
+print(encryptaffinecipher(a,b,P))
+C = input("input ciphertext: ")
+print(decryptaffinecipher(a,b,C))
+x = input("input the most common letter: ")
+y = input("input the 2nd most common letter: ")
+print(crackaffinecipher(x,y))
+c = input("input string: ")
 d = input("input key: ")
 
-# print(generatekey(c,d))
-# print(Encryptvigenere(c,generatekey(c,d)))
+print(generatekey(c,d))
+print(Encryptvigenere(c,generatekey(c,d)))
 e = input("input cipher: ")
 print(generatekey(e,d))
 print(Decryptvigenere(e,generatekey(e,d)))
