@@ -1,20 +1,35 @@
-plaintext = input("Please Enter text: ").lower()
-key = input("Please Enter Key: ").lower()
+# plaintext = input("Please Enter text: ").lower()
+# key = input("Please Enter Key: ").lower()
+
+def displayMatrix(lst):
+    for line in lst:
+        print(line)
 
 def fixText(plaintext):
     i=0
     while(i<len(plaintext)-1):
-        if(plaintext[i] == plaintext[i+1] and plaintext[i] != 'x'):
-            plaintext = plaintext[:i+1]+'x'+plaintext[i+1:]
+        if(plaintext[i] == plaintext[i+1] and plaintext[i] != 'q'):
+            plaintext = plaintext[:i+1]+'q'+plaintext[i+1:]
             i+=1
         elif(plaintext[i] == plaintext[i+1]):
-            plaintext = plaintext[:i+1]+'q'+plaintext[i+1:]
+            plaintext = plaintext[:i+1]+'z'+plaintext[i+1:]
             i+=1
         i+=1
     if(len(plaintext)%2 != 0 and plaintext[len(plaintext)-1] != 'x'):
         plaintext += 'x'
     elif(len(plaintext)%2 != 0):
         plaintext += 'q'
+    return plaintext
+
+def fixDecryptedText(plaintext):
+    if(plaintext[len(plaintext)-1] == 'q' or plaintext[len(plaintext)-1] == 'x'):
+        plaintext = plaintext[:len(plaintext)-1]
+    i=0
+    while(i<len(plaintext)-2):
+        if(plaintext[i] == plaintext[i+2] and (plaintext[i+1] == 'q' or plaintext[i+1] == 'z')):
+            plaintext = plaintext[:i+1]+plaintext[i+2:]
+            i+=1
+        i+=1
     return plaintext
 
 def generateMatrix(key):
@@ -47,9 +62,86 @@ def generateMatrix(key):
     return lst
 
 
-print(fixText(plaintext))
-lst = generateMatrix(key)
+def encryptTwoLettersPlayfair(lst,string):
+    alpha = "abcedfghijklmnopqrstuvwxyz"
+    letter1 = string[0]
+    letter2 = string[1]
+    coordinates1 = [0,0]
+    coordinates2 = [0,0]
+    for i in range(len(lst)):
+        for j in range(len(lst[i])):
+            if letter1 in lst[i][j]:
+                coordinates1 = [i,j]
+            elif letter2 in lst[i][j]:
+                coordinates2 = [i,j]
+    if(coordinates1[1] != coordinates2[1] and coordinates1[0] != coordinates2[0]):
+        coordinates2[1],coordinates1[1] = coordinates1[1],coordinates2[1]
+    elif(coordinates1[0] == coordinates2[0]):
+        coordinates1[1] = (coordinates1[1]+1)%5
+        coordinates2[1] = (coordinates2[1]+1)%5
+    elif(coordinates1[1] == coordinates2[1]):
+        coordinates1[0] = (coordinates1[0]+1)%5
+        coordinates2[0] = (coordinates2[0]+1)%5
+    if(letter1 in alpha):
+        letter1 = lst[coordinates1[0]][coordinates1[1]]
+    if(letter2 in alpha):
+        letter2 = lst[coordinates2[0]][coordinates2[1]]
+    if(letter2 == "i/j"):
+        letter2 = 'i'
+    if(letter1 == "i/j"):
+        letter1 = 'i'
+    return letter1+letter2
 
-for i in range(5):
-    print(lst[i])
+def encryptPlayfair(plainText,key):
+    plainText = fixText(plainText)
+    lst = generateMatrix(key)
+    # displayMatrix(lst)
+    ciphertext = ""
+    subStr = ""
+    for i in range(len(plainText)):
+        subStr += plainText[i]
+        if(i%2 != 0):
+            ciphertext += encryptTwoLettersPlayfair(lst,subStr)
+            subStr = ""
+    return ciphertext
+
+def decryptTwoLettersPlayfair(lst,string):
+    alpha = "abcedfgiklmnopqrstuvwxyz"
+    letter1 = string[0]
+    letter2 = string[1]
+    coordinates1 = [0,0]
+    coordinates2 = [0,0]
+    for i in range(len(lst)):
+        for j in range(len(lst[i])):
+            if letter1 in lst[i][j]:
+                coordinates1 = [i,j]
+            elif letter2 in lst[i][j]:
+                coordinates2 = [i,j]
+    if(coordinates1[1] != coordinates2[1] and coordinates1[0] != coordinates2[0]):
+        coordinates2[1],coordinates1[1] = coordinates1[1],coordinates2[1]
+    elif(coordinates1[0] == coordinates2[0]):
+        coordinates1[1] = (coordinates1[1]-1)%5
+        coordinates2[1] = (coordinates2[1]-1)%5
+    elif(coordinates1[1] == coordinates2[1]):
+        coordinates1[0] = (coordinates1[0]-1)%5
+        coordinates2[0] = (coordinates2[0]-1)%5
+    if(letter1 in alpha):
+        letter1 = lst[coordinates1[0]][coordinates1[1]]
+    if(letter2 in alpha):
+        letter2 = lst[coordinates2[0]][coordinates2[1]]
+    return letter1+letter2
+
+def decryptPlayfair(cipherText,key):
+    lst = generateMatrix(key)
+    plainText = ""
+    subStr = ""
+    for i in range(len(cipherText)):
+        subStr += cipherText[i]
+        if(i%2 != 0):
+            plainText += decryptTwoLettersPlayfair(lst,subStr)
+            subStr = ""
+    print(plainText)
+    plainText = fixDecryptedText(plainText)
+    
+    return plainText
 

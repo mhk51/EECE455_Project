@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def encryption(m):
+def encryptionHill(m):
     # Replace spaces with nothing
     m = m.replace(" ", "")
     # Ask for keyword and get encryption matrix
@@ -30,7 +30,7 @@ def encryption(m):
         integer = int(row_1 % 26 + 65)
         en_m += chr(integer)
     return en_m
-def decryption(en_m):
+def decryptionHill(en_m):
     # Ask for keyword and get encryption matrix
     C = make_key()
     # Inverse matrix
@@ -109,8 +109,8 @@ def chr_to_int(char):
     return integer
 if __name__ == "__main__":
     m = input("enter plaintext: ")
-    en_m = encryption(m)
+    en_m = encryptionHill(m)
     print(en_m)
     en_m = input("enter ciphertext: ")
-    de_m = decryption(en_m)
+    de_m = decryptionHill(en_m)
     print(de_m)

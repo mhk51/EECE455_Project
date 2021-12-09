@@ -1,5 +1,4 @@
 from extended_euclid import extended_euclid
-from encyptions import encryptaffinecipher
 
 # a = int(input("input a: "))
 # b = int(input("input b: "))
@@ -32,9 +31,10 @@ def decryptaffinecipher(a, b, C):
 
 def crackaffinecipher(letter1,letter2):
     lst = [-1,-1]
+    letter1 = letter1.lower()
+    letter2 = letter2.lower()
     x = ord(letter1) - 97
     y = ord(letter2) - 97
-    print(x,y)
     # x = (4a + b)%26
     # y = (19a + b)%26
     # first condition (y-x) = 15a%26
