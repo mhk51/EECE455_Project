@@ -23,16 +23,30 @@ def generate_Matrix(key):
     return lst
 
 def inverse_Matrix(matrix):
-    A = np.array(matrix)
-    det = int(round(np.linalg.det(A),0))
-    factor = extended_euclid(26,abs(det))
+    det = 0
+    if(len(matrix) == 2):
+        det = matrix[0][0]*matrix[1][1] - (matrix[1][0]*matrix[0][1])%26
+        matrix[1][1],matrix[0][0] = matrix[0][0],matrix[1][1]
+        matrix[0][1] = - matrix[0][1]
+        matrix[1][0] = - matrix[1][0]
+    elif(len(matrix) == 3):
+        gfg = np.matrix(matrix)
+        det = round(np.linalg.det(gfg),0)
+        # applying matrix.getH() method
+        matrix = np.linalg.inv(gfg)
+        matrix = matrix.tolist()
+        for i in range(len(matrix)):
+            for j in range(len(matrix[i])):
+                matrix[i][j] = int(round((matrix[i][j]*det)%26,0))
+    factor = int(extended_euclid(26,abs(det%26)))
+    print(factor)
     if(factor != 0):
-        for i in range(len(A)):
-            for j in range(len(A[i])):
-                A[i] = factor*A[i]
-        return A
+        for i in range(len(matrix)):
+            for j in range(len(matrix[i])):
+                matrix[i][j] = int(factor*matrix[i][j]%26)
+        return matrix
     else:
-        return -1
+        return []
 
 def encryptTwoLetters(matrix,letter_lst):
     output_letter_lst = []
@@ -62,21 +76,28 @@ def encryptHillcipher(plaintext,key):
 def decryptHillcipher(ciphertext,key):
     matrix = generate_Matrix(key)
     matrix = inverse_Matrix(matrix)
+    if(matrix == []):
+        print("No inverse try again")
+        return -1
+
     encryption_size = len(matrix)
     while(len(ciphertext)%encryption_size != 0):
         ciphertext+="x"
 
-    ciphertext = ""
+    plaintext = ""
     subStr = ""
     for i in range(len(ciphertext)):
         subStr += ciphertext[i]
         if((i+1)%encryption_size == 0):
             
-            ciphertext += encryptTwoLetters(matrix,subStr)
+            plaintext += encryptTwoLetters(matrix,subStr)
             subStr = ""
-    return ciphertext
+    if(plaintext[len(plaintext)-1] == 'x'):
+        plaintext = plaintext[:len(plaintext)-1]
+    return plaintext
 
-encryptHillcipher(plaintext,key)
+ciphertext = encryptHillcipher(plaintext,key)
+
+print(ciphertext)
     
-
-inverse_Matrix(generate_Matrix(key))
+print(decryptHillcipher(ciphertext,key))
