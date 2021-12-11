@@ -1,3 +1,4 @@
+from math import acos, ceil
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
@@ -13,11 +14,6 @@ root = Tk()
 root.geometry('800x600')
 
 
-def retrieve_input():
-    m = inputM.get("1.0","end-1c")
-    b = inputB.get("1.0","end-1c")
-    outputText.delete(0,"end")
-    outputText.insert(0,extended_euclid(int(m),int(b)))
     
 
 tab_control = ttk.Notebook(root)
@@ -54,38 +50,58 @@ tab_control.add(tab8,text="Hill Cipher 3x3")
 
 tab_control.add(tab1, text='Extended Euclid')
 
-inputB = Text(tab1,height=1,width=3)
-inputB.pack(side = RIGHT)
 
-label1 = Label(tab1,text="b=")
-label1.pack(side = RIGHT)
+description_Extended_Euclid = Label(tab1,text="Use the extended Euclidean algorithm to find the multiplicative inverse of b mod m.\n\
+Input the value of b in the “b” section.\n\
+Input the value of m in the “m” section.")
+description_Extended_Euclid.pack(side=TOP)
 
-inputM = Text(tab1,height=1,width=3)
+extended_euclid_Button = Button(tab1,height=3,width=15,text="Compute",command=lambda:compute_Extended_Euclid())
+extended_euclid_Button.pack(side = TOP)
+extended_euclid_Button.place(relx=.5,rely=.38,anchor=CENTER)
+    
+inputM = Entry(tab1,width=3)
 inputM.pack(side = RIGHT)
+inputM.place(relx=.45,rely=.5,anchor=CENTER)
 
-label2 = Label(tab1,text="m=")
-label2.pack(side = RIGHT)
+label_CrackAffine_Letter1 = Label(tab1,text="m=")
+label_CrackAffine_Letter1.pack(side = RIGHT)
+label_CrackAffine_Letter1.place(relx=.37,rely=.5,anchor=CENTER)
 
-outputText = Entry(tab1)
-outputText.pack(side = BOTTOM)
+inputB = Entry(tab1,width=3)
+inputB.pack(side = RIGHT)
+inputB.place(relx=.6,rely=.5,anchor=CENTER)
+
+label_CrackAffine_Letter2 = Label(tab1,text="b=")
+label_CrackAffine_Letter2.pack(side = RIGHT)
+label_CrackAffine_Letter2.place(relx=.52,rely=.5,anchor=CENTER)
 
 
-button = Button(tab1,text="Compute",command=lambda:retrieve_input())
-button.pack(side = LEFT)
+outputExtended_Euclid = Entry(tab1)
+outputExtended_Euclid.pack(side = BOTTOM)
+outputExtended_Euclid.place(relx=.5,rely=.6,anchor=CENTER)
 
+
+def compute_Extended_Euclid():
+    m = inputM.get()
+    b = inputB.get()
+    outputExtended_Euclid.delete(0,"end")
+    outputExtended_Euclid.insert(0,extended_euclid(int(m),int(b)))
 
 def encrypt_Affine():
-    a = inputA_Affine.get("1.0","end-1c")
-    b = inputB_Affine.get("1.0","end-1c")
-    p = inputPlainText_Affine.get("1.0","end-1c")
-    output_Affine.delete(0,"end")
-    output_Affine.insert(0,encryptaffinecipher(int(a),int(b),p))
+    a = inputA_Affine.get()
+    b = inputB_Affine.get()
+    p = plaintext_Affine.get()
+    plaintext_Affine.delete(0,"end")
+    ciphertext_Affine.delete(0,"end")
+    ciphertext_Affine.insert(0,encryptaffinecipher(int(a),int(b),p))
 def decrypt_Affine():
-    a = inputA_Affine.get("1.0","end-1c")
-    b = inputB_Affine.get("1.0","end-1c")
-    p = inputPlainText_Affine.get("1.0","end-1c")
-    output_Affine.delete(0,"end")
-    output_Affine.insert(0,decryptaffinecipher(int(a),int(b),p))
+    a = inputA_Affine.get()
+    b = inputB_Affine.get()
+    p = ciphertext_Affine.get()
+    ciphertext_Affine.delete(0,"end")
+    plaintext_Affine.delete(0,"end")
+    plaintext_Affine.insert(0,decryptaffinecipher(int(a),int(b),p))
 
 def crackAffine():
     letter1 = inputLetter1_CrackAffine.get("1.0","end-1c")
@@ -94,104 +110,119 @@ def crackAffine():
     output_CrackAffine.insert(0,crackaffinecipher(letter1,letter2))
 
 def encrypt_Vigenere():
-    plaintext = inputString_Vigenere.get("1.0","end-1c")
-    key = inputKey_Vigenere.get("1.0","end-1c")
+    plaintext = plaintext_Vigenere.get()
+    plaintext_Vigenere.delete(0,"end")
+    key = key_Vigenere.get()
     key = generatekey(plaintext,key)
-    output_Vigenere.delete(0,"end")
-    output_Vigenere.insert(0,Encryptvigenere(plaintext,key))
+    cipherText_Vigenere.delete(0,"end")
+    cipherText_Vigenere.insert(0,Encryptvigenere(plaintext,key))
 
 def decrypt_Vigenere():
-    ciphertext = inputString_Vigenere.get("1.0","end-1c")
-    key = inputKey_Vigenere.get("1.0","end-1c")
+    ciphertext = cipherText_Vigenere.get()
+    cipherText_Vigenere.delete(0,"end")
+    key = key_Vigenere.get()
     key = generatekey(ciphertext,key)
-    output_Vigenere.delete(0,"end")
-    output_Vigenere.insert(0,Decryptvigenere(ciphertext,key))
+    plaintext_Vigenere.delete(0,"end")
+    plaintext_Vigenere.insert(0,Decryptvigenere(ciphertext,key))
 
 def encrypt_Mono():
-    plaintext = inputString_Mono.get("1.0","end-1c")
-    key = inputKey_Mono.get("1.0","end-1c")
-    output_Mono.delete(0,"end")
-    output_Mono.insert(0,encrypt_Monoalphabetic(plaintext,key))
+    plaintext = plaintext_Mono.get()
+    key = key_Mono.get()
+    plaintext_Mono.delete(0,"end")
+    cipherText_Mono.delete(0,"end")
+    cipherText_Mono.insert(0,encrypt_Monoalphabetic(plaintext,key))
 
 def decrypt_Mono():
-    plaintext = inputString_Mono.get("1.0","end-1c")
-    key = inputKey_Mono.get("1.0","end-1c")
-    output_Mono.delete(0,"end")
-    output_Mono.insert(0,decrypt_Monoalphabetic(plaintext,key))
+    plaintext = cipherText_Mono.get()
+    key = key_Mono.get()
+    cipherText_Mono.delete(0,"end")
+    plaintext_Mono.delete(0,"end")
+    plaintext_Mono.insert(0,decrypt_Monoalphabetic(plaintext,key))
 
 def encrypt_Playfair():
-    plaintext = inputString_Playfair.get("1.0","end-1c")
-    key = inputKey_Playfair.get("1.0","end-1c")
+    plaintext = plaintext_Playfair.get()
+    key = key_Playfair.get()
     lst = generateMatrix(key)
     count = 0
     for i in range(len(lst)):
         for j in range(len(lst[i])):
             playfairMatrix_Lst[count]["text"] = lst[i][j]
             count+=1
-    output_Playfair.delete(0,"end")
-    output_Playfair.insert(0,encryptPlayfair(plaintext,key))
+    plaintext_Playfair.delete(0,"end")
+    cipherText_Playfair.delete(0,"end")
+    cipherText_Playfair.insert(0,encryptPlayfair(plaintext,key))
 
 def decrypt_Playfair():
-    plaintext = inputString_Playfair.get("1.0","end-1c")
-    key = inputKey_Playfair.get("1.0","end-1c")
-    output_Playfair.delete(0,"end")
-    output_Playfair.insert(0,decryptPlayfair(plaintext,key))
+    plaintext = cipherText_Playfair.get()
+    key = key_Playfair.get()
+    lst = generateMatrix(key)
+    count = 0
+    for i in range(len(lst)):
+        for j in range(len(lst[i])):
+            playfairMatrix_Lst[count]["text"] = lst[i][j]
+            count+=1
+    cipherText_Playfair.delete(0,"end")
+    plaintext_Playfair.delete(0,"end")
+    plaintext_Playfair.insert(0,decryptPlayfair(plaintext,key))
 
 def encrypt_Hill():
-    plaintext = inputString_Hill.get("1.0","end-1c")
+    plaintext = plaintext_Hill.get()
     key = []
+    plaintext_Hill.delete(0,"end")
     for i in range(len(matrix_Text_Hill)):
         key.append(matrix_Text_Hill[i].get())
     if(len(key) != 4 and len(key) != 9):
-        output_Hill.delete(0,"end")
-        output_Hill.insert(0,"Invalid Key")
+        cipherText_Hill.delete(0,"end")
+        cipherText_Hill.insert(0,"Invalid Key")
         return
-    output_Hill.delete(0,"end")
-    output_Hill.insert(0,encryptHillcipher(plaintext,key))
+    cipherText_Hill.delete(0,"end")
+    cipherText_Hill.insert(0,encryptHillcipher(plaintext,key))
 
 def decrypt_Hill():
-    plaintext = inputString_Hill.get("1.0","end-1c")
+    ciphertext = cipherText_Hill.get()
     key = []
     for i in range(len(matrix_Text_Hill)):
         key.append(matrix_Text_Hill[i].get())
     if(len(key) != 4 and len(key) != 9):
-        output_Hill.delete(0,"end")
-        output_Hill.insert(0,"Invalid Key")
+        plaintext_Hill.delete(0,"end")
+        plaintext_Hill.insert(0,"Invalid Key")
         return
-    output_Hill.delete(0,"end")
-    string = decryptHillcipher(plaintext,key)
+    plaintext_Hill.delete(0,"end")
+    string = decryptHillcipher(ciphertext,key)
     if(string == "-1"):
-        output_Hill.insert(0,"No inverse")
+        plaintext_Hill.insert(0,"No inverse")
     else:
-        output_Hill.insert(0,string)
+        plaintext_Hill.insert(0,string)
+        cipherText_Hill.delete(0,"end")
 
 def encrypt_Hill_3x3():
-    plaintext = inputString_Hill_3x3.get("1.0","end-1c")
+    plaintext = plaintext_Hill_3x3.get()
     key = []
     for i in range(len(matrix_Text_Hill_3x3)):
         key.append(matrix_Text_Hill_3x3[i].get())
     if(len(key) != 4 and len(key) != 9):
-        output_Hill_3x3.delete(0,"end")
-        output_Hill_3x3.insert(0,"Invalid Key")
+        cipherText_Hill_3x3.delete(0,"end")
+        cipherText_Hill_3x3.insert(0,"Invalid Key")
         return
-    output_Hill_3x3.delete(0,"end")
-    output_Hill_3x3.insert(0,encryptHillcipher(plaintext,key))
+    cipherText_Hill_3x3.delete(0,"end")
+    cipherText_Hill_3x3.insert(0,encryptHillcipher(plaintext,key))
 
 def decrypt_Hill_3x3():
-    plaintext = inputString_Hill_3x3.get("1.0","end-1c")
+    ciphertext = cipherText_Hill_3x3.get()
     key = []
     for i in range(len(matrix_Text_Hill_3x3)):
         key.append(matrix_Text_Hill_3x3[i].get())
     if(len(key) != 4 and len(key) != 9):
-        output_Hill_3x3.delete(0,"end")
-        output_Hill_3x3.insert(0,"Invalid Key")
+        plaintext_Hill_3x3.delete(0,"end")
+        plaintext_Hill_3x3.insert(0,"Invalid Key")
         return
-    output_Hill_3x3.delete(0,"end")
-    string = decryptHillcipher(plaintext,key)
+    plaintext_Hill_3x3.delete(0,"end")
+    string = decryptHillcipher(ciphertext,key)
     if(string == "-1"):
-        output_Hill_3x3.insert(0,"No inverse")
+        plaintext_Hill_3x3.insert(0,"No inverse")
     else:
-        output_Hill_3x3.insert(0,string)
+        plaintext_Hill_3x3.insert(0,string)
+        cipherText_Hill_3x3.delete(0,"end")
 
 tab7.columnconfigure(0, weight=1)
 tab7.rowconfigure(0, weight=1)
@@ -297,180 +328,269 @@ F3.grid(row=5, column=0, sticky=(N,W))
 FMas.pack(side = LEFT)
 
 
-
-encrypt_Affine_Button = Button(tab2,text="Encrypt",command=lambda:encrypt_Affine())
+description_Affine = Label(tab2,text="A generalization of the Caesar Cipher is the Affine Cipher given by: C = (a.P + b) mod 26,\n Where P is the plain character and C is the cipher character, a and b are coefficients.\n The decryption of the Affine Cipher is given by: P = a-1 (C – b) mod 26, where a-1 is the inverse of a mod 26.\n Note that characters are assigned values of A=0 and Z=25.\n\
+Input the word or sentence you want to encrypt in the “plaintext” section.\n\
+Input the word or sentence you want to decrypt in the “ciphertext” section.\n\
+Input the values of the coefficients a and b in the “a” and “b” sections.")
+description_Affine.pack(side = TOP)
+encrypt_Affine_Button = Button(tab2,width=10,height=2,text="Encrypt",command=lambda:encrypt_Affine())
 encrypt_Affine_Button.pack(side = TOP)
-decrypt_Affine_Button = Button(tab2,text="Decrypt",command=lambda:decrypt_Affine())
+encrypt_Affine_Button.place(relx=.4,rely=.3,anchor=CENTER)
+decrypt_Affine_Button = Button(tab2,width=10,height=2,text="Decrypt",command=lambda:decrypt_Affine())
 decrypt_Affine_Button.pack(side = TOP)
+decrypt_Affine_Button.place(relx=.6,rely=.3,anchor=CENTER)
     
-inputA_Affine = Text(tab2,height=1,width=3)
+inputA_Affine = Entry(tab2,width=3)
 inputA_Affine.pack(side = RIGHT)
+inputA_Affine.place(relx=.45,rely=.6,anchor=CENTER)
 
-label1 = Label(tab2,text="a=")
-label1.pack(side = RIGHT)
+label_A_Affine = Label(tab2,text="a=")
+label_A_Affine.pack(side = RIGHT)
+label_A_Affine.place(relx=.42,rely=.6,anchor=CENTER)
 
-inputB_Affine = Text(tab2,height=1,width=3)
+
+inputB_Affine = Entry(tab2,width=3)
 inputB_Affine.pack(side = RIGHT)
+inputB_Affine.place(relx=.55,rely=.6,anchor=CENTER)
 
-label2 = Label(tab2,text="b=")
-label2.pack(side = RIGHT)
+label_B_Affine = Label(tab2,text="b=")
+label_B_Affine.pack(side = RIGHT)
+label_B_Affine.place(relx=.52,rely=.6,anchor=CENTER)
 
-inputPlainText_Affine = Text(tab2,height=1,width=10)
-inputPlainText_Affine.pack(side = RIGHT)
+plaintext_Affine = Entry(tab2,width=20)
+plaintext_Affine.pack(side = RIGHT)
+plaintext_Affine.place(relx=.4,rely=.5,anchor=CENTER)
 
-label3 = Label(tab2,text="PlainText:")
-label3.pack(side = RIGHT)
+label_Affine_Plaintext = Label(tab2,text="PlainText:")
+label_Affine_Plaintext.pack(side = RIGHT)
+label_Affine_Plaintext.place(relx=.4,rely=.45,anchor=CENTER)
 
-output_Affine = Entry(tab2)
-output_Affine.pack(side = BOTTOM)
+ciphertext_Affine = Entry(tab2,width=20)
+ciphertext_Affine.pack(side = RIGHT)
+ciphertext_Affine.place(relx=.6,rely=.5,anchor=CENTER)
 
-outputLabel = Label(tab2,text="Output")
-outputLabel.pack(side = BOTTOM)
+label_Affine_ciphertext = Label(tab2,text="PlainText:")
+label_Affine_ciphertext.pack(side = RIGHT)
+label_Affine_ciphertext.place(relx=.6,rely=.45,anchor=CENTER)
 
 
 
-encrypt_CrackAffine_Button = Button(tab5,text="Crack",command=lambda:crackAffine())
+
+description_CrackAffine = Label(tab5,text = "We know that the most frequent letters of the English alphabet are E and T.\n After doing Affine encryption to a plaintext, the most frequent letters became BOX1 and BOX2.\n The values of a and b are:")
+description_CrackAffine.pack(side =TOP)
+encrypt_CrackAffine_Button = Button(tab5,height=3,width=15,text="Crack",command=lambda:crackAffine())
 encrypt_CrackAffine_Button.pack(side = TOP)
+encrypt_CrackAffine_Button.place(relx=.5,rely=.38,anchor=CENTER)
     
 inputLetter1_CrackAffine = Text(tab5,height=1,width=3)
 inputLetter1_CrackAffine.pack(side = RIGHT)
+inputLetter1_CrackAffine.place(relx=.45,rely=.5,anchor=CENTER)
 
-label1 = Label(tab5,text="First Letter:")
-label1.pack(side = RIGHT)
+label_CrackAffine_Letter1 = Label(tab5,text="First Letter:")
+label_CrackAffine_Letter1.pack(side = RIGHT)
+label_CrackAffine_Letter1.place(relx=.37,rely=.5,anchor=CENTER)
 
 inputLetter2_CrackAffine = Text(tab5,height=1,width=3)
 inputLetter2_CrackAffine.pack(side = RIGHT)
+inputLetter2_CrackAffine.place(relx=.6,rely=.5,anchor=CENTER)
 
-label2 = Label(tab5,text="Second Letter:")
-label2.pack(side = RIGHT)
+label_CrackAffine_Letter2 = Label(tab5,text="Second Letter:")
+label_CrackAffine_Letter2.pack(side = RIGHT)
+label_CrackAffine_Letter2.place(relx=.52,rely=.5,anchor=CENTER)
 
 
 output_CrackAffine = Entry(tab5)
 output_CrackAffine.pack(side = BOTTOM)
-
-outputLabel = Label(tab5,text="Output")
-outputLabel.pack(side = BOTTOM)
+output_CrackAffine.place(relx=.5,rely=.6,anchor=CENTER)
 
 
 
 
 
-encrypt_Vigenere_Button = Button(tab3,text = "Encrypt",command = lambda:encrypt_Vigenere())
+description_Vigenere = Label(tab3,text = "Use the Vigenere cipher to encrypt/decrypt a word or a sentence using a special key.\n\
+Input the word or sentence you want to encrypt in the “plaintext” section.\n\
+Input the word or sentence you want to decrypt in the “ciphertext” section.\n\
+Input the values of the key in the “key” section.")
+description_Vigenere.pack(side =TOP)
+
+encrypt_Vigenere_Button = Button(tab3,height=2,width=10,text = "Encrypt",command = lambda:encrypt_Vigenere())
 encrypt_Vigenere_Button.pack(side = TOP)
-decrypt_Vigenere_Button = Button(tab3,text = "Decrypt",command=lambda:decrypt_Vigenere())
+encrypt_Vigenere_Button.place(relx=.4,rely=.3,anchor=CENTER)
+decrypt_Vigenere_Button = Button(tab3,height=2,width=10,text = "Decrypt",command=lambda:decrypt_Vigenere())
 decrypt_Vigenere_Button.pack(side = TOP)
+decrypt_Vigenere_Button.place(relx=.6,rely=.3,anchor=CENTER)
 
 
-inputString_Vigenere = Text(tab3,height=1,width=10)
-inputString_Vigenere.pack(side = RIGHT)
+plaintext_Vigenere = Entry(tab3,width=30)
+plaintext_Vigenere.pack(side = RIGHT)
+plaintext_Vigenere.place(relx =.35,rely=.5,anchor=CENTER)
 
-label1 = Label(tab3,text="PlainText:")
-label1.pack(side = RIGHT)
+label_Vigenere_Plaintext = Label(tab3,text="PlainText:")
+label_Vigenere_Plaintext.pack(side = RIGHT)
+label_Vigenere_Plaintext.place(relx=.35,rely=.45,anchor=CENTER)
 
-inputKey_Vigenere = Text(tab3,height=1,width=10)
-inputKey_Vigenere.pack(side = RIGHT)
+key_Vigenere = Entry(tab3,width=20)
+key_Vigenere.pack(side = RIGHT)
+key_Vigenere.place(relx=.5, rely=.7,anchor= CENTER)
 
-label2 = Label(tab3,text="Key:")
-label2.pack(side = RIGHT)
-
-
-output_Vigenere = Entry(tab3)
-output_Vigenere.pack(side = BOTTOM)
-
-output_Vigenere_Label = Label(tab3,text="Output:")
-output_Vigenere_Label.pack(side = BOTTOM)
+label_Vigenere_Key = Label(tab3,text="Key:")
+label_Vigenere_Key.pack(side = RIGHT)
+label_Vigenere_Key.place(relx=.4,rely=.7,anchor=CENTER)
 
 
+cipherText_Vigenere = Entry(tab3,width=30)
+cipherText_Vigenere.pack(side = BOTTOM)
+cipherText_Vigenere.place(relx=.65,rely=.5,anchor=CENTER)
+
+label_Vigenere_Ciphertext = Label(tab3,text="Ciphertext:")
+label_Vigenere_Ciphertext.pack(side = BOTTOM)
+label_Vigenere_Ciphertext.place(relx=.65,rely=.45,anchor=CENTER)
 
 
-encrypt_Mono_Button = Button(tab4,text = "Encrypt",command = lambda:encrypt_Mono())
+
+
+description_Mono = Label(tab4,text="Input the word or sentence you want to encrypt in the “plaintext” section.\n\
+Input the word or sentence you want to decrypt in the “ciphertext” section.\n\
+Input the values of the key in the “key” section.")
+description_Mono.pack(side=TOP)
+
+encrypt_Mono_Button = Button(tab4,height=2,width=10,text = "Encrypt",command = lambda:encrypt_Mono())
 encrypt_Mono_Button.pack(side = TOP)
-decrypt_Mono_Button = Button(tab4,text = "Decrypt",command=lambda:decrypt_Mono())
+encrypt_Mono_Button.place(relx=.4,rely=.3,anchor=CENTER)
+decrypt_Mono_Button = Button(tab4,height=2,width=10,text = "Decrypt",command=lambda:decrypt_Mono())
 decrypt_Mono_Button.pack(side = TOP)
+decrypt_Mono_Button.place(relx=.6,rely=.3,anchor=CENTER)
 
 
-inputString_Mono = Text(tab4,height=1,width=10)
-inputString_Mono.pack(side = RIGHT)
+plaintext_Mono = Entry(tab4,width=30)
+plaintext_Mono.pack(side = RIGHT)
+plaintext_Mono.place(relx =.35,rely=.5,anchor=CENTER)
 
-label1 = Label(tab4,text="PlainText:")
-label1.pack(side = RIGHT)
+label_Mono_Plaintext = Label(tab4,text="PlainText:")
+label_Mono_Plaintext.pack(side = RIGHT)
+label_Mono_Plaintext.place(relx=.35,rely=.45,anchor=CENTER)
 
-inputKey_Mono = Text(tab4,height=1,width=10)
-inputKey_Mono.pack(side = RIGHT)
+key_Mono = Entry(tab4,width=20)
+key_Mono.pack(side = RIGHT)
+key_Mono.place(relx=.5, rely=.7,anchor= CENTER)
 
-label2 = Label(tab4,text="Key:")
-label2.pack(side = RIGHT)
-
-output_Mono = Entry(tab4)
-output_Mono.pack(side = BOTTOM)
-
-output_Mono_Label = Label(tab4,text="Output:")
-output_Mono_Label.pack(side = BOTTOM)
+label_Mono_Key = Label(tab4,text="Key:")
+label_Mono_Key.pack(side = RIGHT)
+label_Mono_Key.place(relx=.4,rely=.7,anchor=CENTER)
 
 
+cipherText_Mono = Entry(tab4,width=30)
+cipherText_Mono.pack(side = BOTTOM)
+cipherText_Mono.place(relx=.65,rely=.5,anchor=CENTER)
 
-encrypt_Playfair_Button = Button(tab6,text = "Encrypt",command = lambda:encrypt_Playfair())
+label_Mono_Ciphertext = Label(tab4,text="Ciphertext:")
+label_Mono_Ciphertext.pack(side = BOTTOM)
+label_Mono_Ciphertext.place(relx=.65,rely=.45,anchor=CENTER)
+
+
+description_Playfair = Label(tab6,text="Use the Playfair code to encrypt/decrypt a word or a sentence using a special key.\n\
+Input the word or sentence you want to encrypt in the “plaintext” section.\n\
+Input the word or sentence you want to decrypt in the “ciphertext” section.\n\
+Input the values of the key in the “key” section.")
+
+description_Playfair.pack(side=TOP)
+
+
+encrypt_Playfair_Button = Button(tab6,height=2,width=10,text = "Encrypt",command = lambda:encrypt_Playfair())
 encrypt_Playfair_Button.pack(side = TOP)
-decrypt_Playfair_Button = Button(tab6,text = "Decrypt",command=lambda:decrypt_Playfair())
+encrypt_Playfair_Button.place(relx=.6,rely=.3,anchor=CENTER)
+decrypt_Playfair_Button = Button(tab6,height=2,width=10,text = "Decrypt",command=lambda:decrypt_Playfair())
 decrypt_Playfair_Button.pack(side = TOP)
+decrypt_Playfair_Button.place(relx=.8,rely=.3,anchor=CENTER)
 
 
-inputString_Playfair = Text(tab6,height=1,width=10)
-inputString_Playfair.pack(side = RIGHT)
+plaintext_Playfair = Entry(tab6,width=30)
+plaintext_Playfair.pack(side = RIGHT)
+plaintext_Playfair.place(relx =.55,rely=.5,anchor=CENTER)
 
-label1 = Label(tab6,text="PlainText:")
-label1.pack(side = RIGHT)
+label_Playfair_Plaintext = Label(tab6,text="PlainText:")
+label_Playfair_Plaintext.pack(side = RIGHT)
+label_Playfair_Plaintext.place(relx=.55,rely=.45,anchor=CENTER)
 
-inputKey_Playfair = Text(tab6,height=1,width=10)
-inputKey_Playfair.pack(side = RIGHT)
+key_Playfair = Entry(tab6,width=20)
+key_Playfair.pack(side = RIGHT)
+key_Playfair.place(relx=.7, rely=.7,anchor= CENTER)
 
-label2 = Label(tab6,text="Key:")
-label2.pack(side = RIGHT)
-
-output_Playfair = Entry(tab6)
-output_Playfair.pack(side = BOTTOM)
-
-output_Playfair_Label = Label(tab6,text="Output:")
-output_Playfair_Label.pack(side = BOTTOM)
+label_Playfair_Key = Label(tab6,text="Key:")
+label_Playfair_Key.pack(side = RIGHT)
+label_Playfair_Key.place(relx=.6,rely=.7,anchor=CENTER)
 
 
+cipherText_Playfair = Entry(tab6,width=30)
+cipherText_Playfair.pack(side = BOTTOM)
+cipherText_Playfair.place(relx=.85,rely=.5,anchor=CENTER)
 
-encrypt_Hill_Button = Button(tab7,text="Encrypt",command=lambda:encrypt_Hill())
+label_Playfair_Ciphertext = Label(tab6,text="Ciphertext:")
+label_Playfair_Ciphertext.pack(side = BOTTOM)
+label_Playfair_Ciphertext.place(relx=.85,rely=.45,anchor=CENTER)
+
+
+description_Hill = Label(tab7,text="Fill the matrix given that will represent the key used in Hill cipher.\n\
+Input the word or sentence you want to encrypt in the “plaintext” section.\n\
+Input the word or sentence you want to decrypt in the “ciphertext” section.")
+
+description_Hill.pack(side=TOP)
+
+
+encrypt_Hill_Button = Button(tab7,height=2,width=10,text = "Encrypt",command = lambda:encrypt_Hill())
 encrypt_Hill_Button.pack(side = TOP)
-decrypt_Hill_Button = Button(tab7,text="Decrypt",command=lambda:decrypt_Hill())
+encrypt_Hill_Button.place(relx=.4,rely=.3,anchor=CENTER)
+decrypt_Hill_Button = Button(tab7,height=2,width=10,text = "Decrypt",command=lambda:decrypt_Hill())
 decrypt_Hill_Button.pack(side = TOP)
+decrypt_Hill_Button.place(relx=.6,rely=.3,anchor=CENTER)
 
 
-inputString_Hill = Text(tab7,height=1,width=10)
-inputString_Hill.pack(side = RIGHT)
+plaintext_Hill = Entry(tab7,width=30)
+plaintext_Hill.pack(side = RIGHT)
+plaintext_Hill.place(relx =.35,rely=.5,anchor=CENTER)
 
-label3 = Label(tab7,text="PlainText:")
-label3.pack(side = RIGHT)
+label_Hill_Plaintext = Label(tab7,text="PlainText:")
+label_Hill_Plaintext.pack(side = RIGHT)
+label_Hill_Plaintext.place(relx=.35,rely=.45,anchor=CENTER)
 
-output_Hill = Entry(tab7,width=20)
-output_Hill.pack(side = BOTTOM)
+cipherText_Hill = Entry(tab7,width=30)
+cipherText_Hill.pack(side = BOTTOM)
+cipherText_Hill.place(relx=.65,rely=.5,anchor=CENTER)
 
-outputLabel = Label(tab7,text="Output")
-outputLabel.pack(side = BOTTOM)
+label_Hill_Ciphertext = Label(tab7,text="Ciphertext:")
+label_Hill_Ciphertext.pack(side = BOTTOM)
+label_Hill_Ciphertext.place(relx=.65,rely=.45,anchor=CENTER)
 
-encrypt_Hill_Button_3x3 = Button(tab8,text="Encrypt",command=lambda:encrypt_Hill_3x3())
-encrypt_Hill_Button_3x3.pack(side = TOP)
-decrypt_Hill_Button_3x3 = Button(tab8,text="Decrypt",command=lambda:decrypt_Hill_3x3())
-decrypt_Hill_Button_3x3.pack(side = TOP)
 
-    
+description_Hill = Label(tab8,text="Fill the matrix given that will represent the key used in Hill cipher.\n\
+Input the word or sentence you want to encrypt in the “plaintext” section.\n\
+Input the word or sentence you want to decrypt in the “ciphertext” section.")
 
-inputString_Hill_3x3 = Text(tab8,height=1,width=10)
-inputString_Hill_3x3.pack(side = RIGHT)
+description_Hill.pack(side=TOP)
 
-label3 = Label(tab8,text="PlainText:")
-label3.pack(side = RIGHT)
+encrypt_Hill_3x3_Button = Button(tab8,height=2,width=10,text = "Encrypt",command = lambda:encrypt_Hill_3x3())
+encrypt_Hill_3x3_Button.pack(side = TOP)
+encrypt_Hill_3x3_Button.place(relx=.4,rely=.3,anchor=CENTER)
+decrypt_Hill_3x3_Button = Button(tab8,height=2,width=10,text = "Decrypt",command=lambda:decrypt_Hill_3x3())
+decrypt_Hill_3x3_Button.pack(side = TOP)
+decrypt_Hill_3x3_Button.place(relx=.6,rely=.3,anchor=CENTER)
 
-output_Hill_3x3 = Entry(tab8,width=20)
-output_Hill_3x3.pack(side = BOTTOM)
 
-outputLabel = Label(tab8,text="Output")
-outputLabel.pack(side = BOTTOM)
+plaintext_Hill_3x3 = Entry(tab8,width=30)
+plaintext_Hill_3x3.pack(side = RIGHT)
+plaintext_Hill_3x3.place(relx =.35,rely=.5,anchor=CENTER)
+
+label_Hill_3x3_Plaintext = Label(tab8,text="PlainText:")
+label_Hill_3x3_Plaintext.pack(side = RIGHT)
+label_Hill_3x3_Plaintext.place(relx=.35,rely=.45,anchor=CENTER)
+
+cipherText_Hill_3x3 = Entry(tab8,width=30)
+cipherText_Hill_3x3.pack(side = BOTTOM)
+cipherText_Hill_3x3.place(relx=.65,rely=.5,anchor=CENTER)
+
+label_Hill_3x3_Ciphertext = Label(tab8,text="Ciphertext:")
+label_Hill_3x3_Ciphertext.pack(side = BOTTOM)
+label_Hill_3x3_Ciphertext.place(relx=.65,rely=.45,anchor=CENTER)
 
 
 tab_control.pack(expand=1, fill='both')

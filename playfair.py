@@ -154,13 +154,10 @@ def encryptPlayfair(plainText,key):
     nonalphaChars = []
     for i in range(len(plainText)):
         char = plainText[i]
-        if char in valid_letters:
-            print()
-        else:
+        if char not in valid_letters:
             nonalphaChars += [(i,char)] 
     plainText = plainText.replace("."," ")
     lst = plainText.split(" ")
-    print(lst)
     for i in range(len(lst)):
         lst[i] = fixText(lst[i])
     # plainText = "".join(lst)
@@ -176,9 +173,7 @@ def decryptPlayfair(ciphertext,key):
     nonalphaChars = []
     for i in range(len(ciphertext)):
         char = ciphertext[i]
-        if char in valid_letters:
-            print()
-        else:
+        if char not in valid_letters:
             nonalphaChars += [(i,char)] 
     ciphertext = ciphertext.replace("."," ")
     lst = ciphertext.split(" ")

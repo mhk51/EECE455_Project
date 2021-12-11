@@ -51,9 +51,7 @@ def crackaffinecipher(letter1,letter2):
             break
         else:
             b = b + 1
-    lst[0] = a
-    lst[1] = b
-    return lst
+    return "a ="+str(a)+"    b="+str(b)
 
 def generatekey(string, key):
     output = key
