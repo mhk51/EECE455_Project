@@ -369,7 +369,7 @@ ciphertext_Affine = Entry(tab2,width=20)
 ciphertext_Affine.pack(side = RIGHT)
 ciphertext_Affine.place(relx=.6,rely=.5,anchor=CENTER)
 
-label_Affine_ciphertext = Label(tab2,text="PlainText:")
+label_Affine_ciphertext = Label(tab2,text="CipherText:")
 label_Affine_ciphertext.pack(side = RIGHT)
 label_Affine_ciphertext.place(relx=.6,rely=.45,anchor=CENTER)
 
