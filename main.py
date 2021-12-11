@@ -376,7 +376,7 @@ label_Affine_ciphertext.place(relx=.6,rely=.45,anchor=CENTER)
 
 
 
-description_CrackAffine = Label(tab5,text = "We know that the most frequent letters of the English alphabet are E and T.\n After doing Affine encryption to a plaintext, the most frequent letters became BOX1 and BOX2.\n The values of a and b are:")
+description_CrackAffine = Label(tab5,text = "We know that the most frequent letters of the English alphabet are E and T.\n After doing Affine encryption to a plaintext, the most frequent letters became \"First Letter\" and \"Second Letter\".\n The values of a and b are:")
 description_CrackAffine.pack(side =TOP)
 encrypt_CrackAffine_Button = Button(tab5,height=3,width=15,text="Crack",command=lambda:crackAffine())
 encrypt_CrackAffine_Button.pack(side = TOP)
