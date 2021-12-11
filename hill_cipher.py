@@ -61,6 +61,7 @@ def encryptTwoLetters(matrix,letter_lst):
 
 def encryptHillcipher(new_string,key):
     valid_letters = "abcdefghijklmnopqrstuvwxyz"
+    new_string = new_string.lower()
     nonalphaChars = []
     plaintext = ""
     for i in range(len(new_string)):
@@ -95,6 +96,7 @@ def decryptHillcipher(new_string,key):
         return "-1"
 
     valid_letters = "abcdefghijklmnopqrstuvwxyz"
+    new_string = new_string.lower()
     nonalphaChars = []
     ciphertext = ""
     for i in range(len(new_string)):

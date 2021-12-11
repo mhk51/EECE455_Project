@@ -92,10 +92,9 @@ def encryptTwoLettersPlayfair(lst,string):
         letter1 = 'i'
     return letter1+letter2
 
-def encryptPlayfair(plainText,key):
-    plainText = fixText(plainText)
+def encrypt(plainText,key):
     lst = generateMatrix(key)
-    # displayMatrix(lst)
+
     ciphertext = ""
     subStr = ""
     for i in range(len(plainText)):
@@ -103,6 +102,10 @@ def encryptPlayfair(plainText,key):
         if(i%2 != 0):
             ciphertext += encryptTwoLettersPlayfair(lst,subStr)
             subStr = ""
+    # for i in range(len(nonalphaChars)):
+    #     index = nonalphaChars[i][0]
+    #     char = nonalphaChars[i][1]
+    #     ciphertext  = ciphertext[:index] + char + ciphertext[index:]
     return ciphertext
 
 def decryptTwoLettersPlayfair(lst,string):
@@ -131,7 +134,7 @@ def decryptTwoLettersPlayfair(lst,string):
         letter2 = lst[coordinates2[0]][coordinates2[1]]
     return letter1+letter2
 
-def decryptPlayfair(cipherText,key):
+def decrypt(cipherText,key):
     lst = generateMatrix(key)
     plainText = ""
     subStr = ""
@@ -144,3 +147,60 @@ def decryptPlayfair(cipherText,key):
     
     return plainText
 
+
+def encryptPlayfair(plainText,key):
+    valid_letters = "abcdefghijklmnopqrstuvwxyz"
+    plainText = plainText.lower()
+    nonalphaChars = []
+    for i in range(len(plainText)):
+        char = plainText[i]
+        if char in valid_letters:
+            print()
+        else:
+            nonalphaChars += [(i,char)] 
+    plainText = plainText.replace("."," ")
+    lst = plainText.split(" ")
+    print(lst)
+    for i in range(len(lst)):
+        lst[i] = fixText(lst[i])
+    # plainText = "".join(lst)
+    # plainText = fixText(plainText)
+
+    for i in range(len(lst)):
+        lst[i] = encrypt(lst[i],key)
+    return " ".join(lst)
+
+def decryptPlayfair(ciphertext,key):
+    valid_letters = "abcdefghijklmnopqrstuvwxyz"
+    ciphertext = ciphertext.lower()
+    nonalphaChars = []
+    for i in range(len(ciphertext)):
+        char = ciphertext[i]
+        if char in valid_letters:
+            print()
+        else:
+            nonalphaChars += [(i,char)] 
+    ciphertext = ciphertext.replace("."," ")
+    lst = ciphertext.split(" ")
+    # print(lst)
+    for i in range(len(lst)):
+        lst[i] = fixText(lst[i])
+
+
+    for i in range(len(lst)):
+        lst[i] = decrypt(lst[i],key)
+    return " ".join(lst)
+
+
+
+
+# plaintext = input("Plaintext: ")
+# key = input("key: ")
+
+# ciphertext = encryptPlayfair(plaintext,key)
+
+# print(ciphertext)
+
+# print(decryptPlayfair(ciphertext,key))
+
+# print(encrypt(plaintext,key))
