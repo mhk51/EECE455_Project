@@ -29,7 +29,6 @@ def inverse_Matrix(matrix):
         matrix[1][1],matrix[0][0] = matrix[0][0],matrix[1][1]
         matrix[0][1] = - matrix[0][1]
         matrix[1][0] = - matrix[1][0]
-        print(det)
     elif(len(matrix) == 3):
         gfg = np.matrix(matrix)
         det = round(np.linalg.det(gfg),0)
@@ -89,12 +88,21 @@ def encryptHillcipher(new_string,key):
         ciphertext  = ciphertext[:index] + char + ciphertext[index:]
     return ciphertext
 
-def decryptHillcipher(ciphertext,key):
+def decryptHillcipher(new_string,key):
     matrix = generate_Matrix(key)
     matrix = inverse_Matrix(matrix)
     if(matrix == []):
         return "-1"
-    print(matrix)
+
+    valid_letters = "abcdefghijklmnopqrstuvwxyz"
+    nonalphaChars = []
+    ciphertext = ""
+    for i in range(len(new_string)):
+        char = new_string[i]
+        if char in valid_letters:
+            ciphertext += char
+        else:
+            nonalphaChars += [(i,char)] 
     encryption_size = len(matrix)
     while(len(ciphertext)%encryption_size != 0):
         ciphertext+="x"
@@ -109,5 +117,9 @@ def decryptHillcipher(ciphertext,key):
             subStr = ""
     if(plaintext[len(plaintext)-1] == 'x'):
         plaintext = plaintext[:len(plaintext)-1]
+    for i in range(len(nonalphaChars)):
+        index = nonalphaChars[i][0]
+        char = nonalphaChars[i][1]
+        plaintext  = plaintext[:index] + char + plaintext[index:]
     return plaintext
 
