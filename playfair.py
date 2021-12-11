@@ -140,7 +140,6 @@ def decryptPlayfair(cipherText,key):
         if(i%2 != 0):
             plainText += decryptTwoLettersPlayfair(lst,subStr)
             subStr = ""
-    print(plainText)
     plainText = fixDecryptedText(plainText)
     
     return plainText
