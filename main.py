@@ -4,7 +4,7 @@ from tkinter import ttk
 from numpy.core.fromnumeric import size
 
 from numpy.matrixlib.defmatrix import matrix
-from encyptions import encryptaffinecipher,Encryptvigenere,decryptaffinecipher,Decryptvigenere,crackaffinecipher
+from encyptions import encryptaffinecipher,Encryptvigenere,decryptaffinecipher,Decryptvigenere,crackaffinecipher,generatekey
 from extended_euclid import extended_euclid
 from monoalphabetic_cipher import encrypt_Monoalphabetic,decrypt_Monoalphabetic
 from playfair import decryptPlayfair, encryptPlayfair,generateMatrix
@@ -96,15 +96,16 @@ def crackAffine():
 def encrypt_Vigenere():
     plaintext = inputString_Vigenere.get("1.0","end-1c")
     key = inputKey_Vigenere.get("1.0","end-1c")
+    key = generatekey(plaintext,key)
     output_Vigenere.delete(0,"end")
     output_Vigenere.insert(0,Encryptvigenere(plaintext,key))
 
 def decrypt_Vigenere():
-    a = inputA_Affine.get("1.0","end-1c")
-    b = inputB_Affine.get("1.0","end-1c")
-    p = inputPlainText_Affine.get("1.0","end-1c")
+    ciphertext = inputString_Vigenere.get("1.0","end-1c")
+    key = inputKey_Vigenere.get("1.0","end-1c")
+    key = generatekey(ciphertext,key)
     output_Vigenere.delete(0,"end")
-    output_Vigenere.insert(0,decryptaffinecipher(int(a),int(b),p))
+    output_Vigenere.insert(0,Decryptvigenere(ciphertext,key))
 
 def encrypt_Mono():
     plaintext = inputString_Mono.get("1.0","end-1c")
