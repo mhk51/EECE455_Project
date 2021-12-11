@@ -192,15 +192,3 @@ def decryptPlayfair(ciphertext,key):
     return " ".join(lst)
 
 
-
-
-# plaintext = input("Plaintext: ")
-# key = input("key: ")
-
-# ciphertext = encryptPlayfair(plaintext,key)
-
-# print(ciphertext)
-
-# print(decryptPlayfair(ciphertext,key))
-
-# print(encrypt(plaintext,key))
